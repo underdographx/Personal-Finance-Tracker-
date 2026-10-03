@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Finance Tracker</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-brand">
+                <div class="brand-icon">💎</div>
+                <div>
+                    <h1>Personal Finance Tracker</h1>
+                    <p>Track income, manage expenses, and monitor your net balance</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Dashboard Layout -->
+        <div class="dashboard-grid">
+            
+            <!-- Left Column: Form Section -->
+            <section class="card form-card">
+                <div class="card-header">
+                    <h2 id="form-title">Add Transaction</h2>
+                    <span id="form-subtitle" class="subtitle">Enter income or expense details</span>
+                </div>
+                
+                <form id="finance-form" class="finance-form">
+                    <input type="hidden" id="transaction-id">
+                    
+                    <!-- Transaction Type Toggle -->
+                    <div class="form-group">
+                        <label for="transaction-type">Type</label>
+                        <select id="transaction-type" required>
+                            <option value="expense" selected>💸 Expense</option>
+                            <option value="income">💰 Income</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="transaction-title">Title</label>
+                        <input type="text" id="transaction-title" placeholder="e.g. Monthly Salary, Grocery..." required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="transaction-amount">Amount (₹)</label>
+                        <input type="number" id="transaction-amount" placeholder="e.g. 2500" step="0.01" min="0.01" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="transaction-category">Category</label>
+                        <select id="transaction-category" required>
+                            <!-- Dynamically populated by JS based on Type -->
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="transaction-date">Date</label>
+                        <input type="date" id="transaction-date" required>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" id="submit-btn" class="btn btn-primary">
+                            <span>Add Transaction</span>
+                        </button>
+                        <button type="button" id="cancel-btn" class="btn btn-secondary hidden">
+                            <span>Cancel</span>
+                        </button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- Right Column: Dashboard Stats & Transactions -->
+            <main class="dashboard-main">
+                
+                <!-- Financial Overview Stats Cards -->
+                <div class="stats-row">
+                    <div class="card stat-card stat-balance">
+                        <span class="stat-label">Net Balance</span>
+                        <div class="stat-value" id="net-balance">₹0.00</div>
+                        <span class="stat-subtext" id="balance-status">Healthy Cash Flow</span>
+                    </div>
+
+                    <div class="card stat-card stat-income">
+                        <span class="stat-label">Total Income</span>
+                        <div class="stat-value income-color" id="total-income">+₹0.00</div>
+                        <span class="stat-subtext" id="income-count">0 deposits</span>
+                    </div>
+
+                    <div class="card stat-card stat-expense">
+                        <span class="stat-label">Total Expenses</span>
+                        <div class="stat-value expense-color" id="total-expense">-₹0.00</div>
+                        <span class="stat-subtext" id="expense-count">0 payments</span>
+                    </div>
+
+                    <div class="card stat-card stat-savings">
+                        <span class="stat-label">Savings Rate</span>
+                        <div class="stat-value" id="savings-rate">0%</div>
+                        <span class="stat-subtext" id="savings-subtext">of income saved</span>
+                    </div>
+                </div>
+
+                <!-- Category Analytics Section -->
+                <section class="card summary-card">
+                    <div class="card-header breakdown-header">
+                        <div>
+                            <h2>Category Breakdown</h2>
+                            <span class="subtitle">Distribution of your finances</span>
+                        </div>
+                        <div class="tab-group">
+                            <button class="tab-btn active" id="tab-expense">Expenses</button>
+                            <button class="tab-btn" id="tab-income">Income</button>
+                        </div>
+                    </div>
+
+                    <div id="category-summary-list" class="category-summary-list">
+                        <!-- Dynamic Progress Bars Rendered by JS -->
+                    </div>
+                </section>
+
+                <!-- Transactions History Section -->
+                <section class="card list-card">
+                    <div class="card-header list-header-wrap">
+                        <div>
+                            <h2>Transactions</h2>
+                            <span class="subtitle">All income & expense logs</span>
+                        </div>
+                        
+                        <!-- Filter Controls -->
+                        <div class="filter-controls">
+                            <div class="filter-group">
+                                <label for="filter-type">Type:</label>
+                                <select id="filter-type">
+                                    <option value="all">All</option>
+                                    <option value="income">Income</option>
+                                    <option value="expense">Expense</option>
+                                </select>
+                            </div>
+
+                            <div class="filter-group">
+                                <label for="filter-category">Category:</label>
+                                <select id="filter-category">
+                                    <option value="all">All Categories</option>
+                                </select>
+                            </div>
+
+                            <div class="filter-group">
+                                <label for="filter-date">Date:</label>
+                                <input type="date" id="filter-date">
+                            </div>
+
+                            <button id="reset-filters-btn" class="btn btn-outline" title="Reset Filters">Clear</button>
+                        </div>
+                    </div>
+
+                    <!-- Transaction List Container -->
+                    <div id="transaction-list" class="transaction-list">
+                        <!-- Dynamic Transaction Cards Rendered by JS -->
+                    </div>
+
+                    <!-- Empty State -->
+                    <div id="empty-state" class="empty-state">
+                        <div class="empty-icon">📊</div>
+                        <h3>No transactions found</h3>
+                        <p>Add a new income or expense to populate your finance dashboard!</p>
+                    </div>
+                </section>
+
+            </main>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
